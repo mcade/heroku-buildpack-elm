@@ -53,26 +53,26 @@ download ${S3_URL}/elm/${ELM_VERSION} elm-make
 chmod -R a+x ${cache}/bin
 
 # Restore elm package cache
-if test -d ${cache}/elm-stuff; then
+if test -d ${cache}/web/elm/elm-stuff; then
    echo "-----> Restoring Elm cache"
-   cp -r ${cache}/elm-stuff ${build}/elm-stuff
+   cp -r ${cache}/web/elm/elm-stuff ${build}/web/elm/elm-stuff
 fi
 
 cd ${build}
 echo "-----> Fetching dependencies"
 elm package install --yes | indent
 
-get_app_json_env() {
-    name=$1
-    if ! test -f ${build}/app.json; then
-        error "app.json missing."
-    fi
-    python -c "import json; j=json.load(open('app.json')); print j['env']['${name}']"
-}
+# get_app_json_env() {
+#     name=$1
+#     if ! test -f ${build}/web/elm/app.json; then
+#         error "app.json missing."
+#     fi
+#     python -c "import json; j=json.load(open('app.json')); print j['env']['${name}']"
+# }
 
-ELM_COMPILE=$(get_app_json_env "ELM_COMPILE")
-echo "-----> Compiling with ${ELM_COMPILE}"
-${ELM_COMPILE} | indent
+# ELM_COMPILE=$(get_app_json_env "ELM_COMPILE")
+# echo "-----> Compiling with ${ELM_COMPILE}"
+# ${ELM_COMPILE} | indent
 
 # Copy package and compile artifacts back to cache
-cp -r ${build}/elm-stuff ${cache}/
+cp -r ${build}/web/elm/elm-stuff ${cache}/
