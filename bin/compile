@@ -61,6 +61,7 @@ fi
 cd ${build}
 echo "-----> Fetching dependencies"
 elm package install --yes | indent
+elm package install evancz/elm-html --yes | indent
 
 get_app_json_env() {
     name=$1
