@@ -58,7 +58,7 @@ if test -d ${cache}/web/elm/elm-stuff; then
    cp -r ${cache}/web/elm/elm-stuff ${build}/web/elm/elm-stuff
 fi
 
-cd ${build}
+cd ${build}/web/elm
 echo "-----> Fetching dependencies"
 elm package install --yes | indent
 elm package install evancz/elm-html --yes | indent
@@ -68,7 +68,7 @@ get_app_json_env() {
     if ! test -f ${build}/web/elm/app.json; then
         error "app.json missing."
     fi
-    python -c "import json; j=json.load(open('app.json')); print j['env']['${name}']"
+    python -c "import json; j=json.load(open('web/elm/app.json')); print j['env']['${name}']"
 }
 
 ELM_COMPILE=$(get_app_json_env "ELM_COMPILE")
