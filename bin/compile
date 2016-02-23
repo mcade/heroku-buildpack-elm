@@ -68,7 +68,7 @@ get_app_json_env() {
     if ! test -f ${build}/web/elm/app.json; then
         error "app.json missing."
     fi
-    python -c "import json; j=json.load(open('web/elm/app.json')); print j['env']['${name}']"
+    python -c "import json; j=json.load(open('app.json')); print j['env']['${name}']"
 }
 
 ELM_COMPILE=$(get_app_json_env "ELM_COMPILE")
