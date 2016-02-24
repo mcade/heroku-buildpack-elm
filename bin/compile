@@ -63,6 +63,8 @@ echo "-----> Fetching dependencies"
 elm package install --yes | indent
 elm package install evancz/elm-html --yes | indent
 
+elm make --yes --output ../static/vendor/seatsaver.js SeatSaver.elm
+
 # get_app_json_env() {
 #     name=$1
 #     if ! test -f ${build}/web/elm/app.json; then
