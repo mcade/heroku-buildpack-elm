@@ -71,9 +71,47 @@ get_app_json_env() {
     python -c "import json; j=json.load(open('app.json')); print j['env']['${name}']"
 }
 
+
+build_pack_dir=$(cd $(dirname $(dirname $0)); pwd)
+
+# Ensure dirs are present
+mkdir -p $1 $2 $3
+
+build_dir=$(cd $1 && pwd)
+cache_dir=$(cd $2 && pwd)
+env_dir=$(cd $3 && pwd)
+heroku_dir=$build_dir/.heroku
+mkdir -p $heroku_dir/node
+
+source ${build_pack_dir}/lib/common.sh
+source ${build_pack_dir}/lib/build.sh
+
+old_npm=$(file_contents "$cache_dir/npm-version")
+old_node=$(file_contents "$cache_dir/node-version")
+
+head "Loading configuration and environment"
+load_config
+export_config_vars
+export_mix_env
+
+cached_node=$cache_dir/node-v$node_version-linux-x64.tar.gz
+
+head "Installing binaries"
+download_node
+install_node
+install_npm
+
+head "Building dependencies"
+install_and_cache_npm_deps
+
 ELM_COMPILE=$(get_app_json_env "ELM_COMPILE")
 echo "-----> Compiling with ${ELM_COMPILE}"
 ${ELM_COMPILE} | indent
 
 # Copy package and compile artifacts back to cache
 cp -r ${build}/web/elm/elm-stuff ${cache}/
+
+compile
+
+head "Finalizing build"
+write_profile
